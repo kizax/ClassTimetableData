@@ -1,3 +1,4 @@
+import json
 import requests
 import re
 
@@ -6,6 +7,9 @@ from bs4 import BeautifulSoup
 TEACHER_PAGE_LIST_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108first/INDEX_TEAC.HTM"
 CLASS_PAGE_LIST_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108first/INDEX_CLASS.HTM"
 ROOT_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108first/";
+
+EDITION = "26"
+TITLE = "108學年度第一學期課表"
 
 TOTAL_GRADE_NUM = 3
 TOTAL_CLASS_NUM = 25
@@ -168,8 +172,6 @@ for teacher_link in soup.select("p a"):
     }
     id_count += 1
 
-print(teacher_page_link_list)
-
 
 output_teacher_list = []
 
@@ -207,8 +209,6 @@ for grade_num in range(1, TOTAL_GRADE_NUM + 1):
 
         class_page_link_list[grade_and_class_num] = {"link": class_page_link}
 
-print(class_page_link_list)
-
 
 # 抓網站上所有班級的課表
 print("抓網站上所有班級的課表")
@@ -231,8 +231,6 @@ for grade_num in range(1, TOTAL_GRADE_NUM + 1):
         class_timetable_page_url = "{root_url}{class_page_link}".format(
             root_url=ROOT_URL,
             class_page_link=class_page_link_list[grade_and_class_num]["link"])
-        print(class_timetable_page_url)
-
         res = requests.get(class_timetable_page_url)
         res.encoding = 'big5'
 
@@ -242,7 +240,6 @@ for grade_num in range(1, TOTAL_GRADE_NUM + 1):
             top=CLASS_TEACHER_NAME_ROW_COORDINATE,
             left=CLASS_TEACHER_NAME_COLUMN_COORDINATE)).get_text()
         class_timetable_list[grade_and_class_num]["class_teacher"] = class_teacher_name
-        print(class_teacher_name)
 
 
         for day_count in range(0, DAY_NUM):
@@ -289,8 +286,6 @@ for grade_num in range(1, TOTAL_GRADE_NUM + 1):
                         })
 
 
-print(class_timetable_list)
-
 output_class_teacher_list = []
 output_class_timetable_list = []
 for grade_num in range(1, TOTAL_GRADE_NUM + 1):
@@ -309,7 +304,7 @@ for grade_num in range(1, TOTAL_GRADE_NUM + 1):
         output_class_teacher_list.append({
             "grade": grade_num,
             "classNum": class_num,
-            "teacherId": teacher_page_link_list[class_timetable_list[grade_and_class_num]["class_teacher"] ],
+            "teacherId": teacher_page_link_list[class_timetable_list[grade_and_class_num]["class_teacher"]]["id"],
             "teacherName": class_timetable_list[grade_and_class_num]["class_teacher"]
         })
 
@@ -332,7 +327,6 @@ for key in teacher_page_link_list:
             "thr": [],
             "fri": []
         }
-    print(teacher_timetable_page_url)
 
     res = requests.get(teacher_timetable_page_url)
     res.encoding = 'big5'
@@ -371,13 +365,10 @@ for key in teacher_page_link_list:
             if pattern.match(grade_and_class_str):
                 teacher_timetable_list[key][DAY_OF_WEEK_TRANSFORM[str(day_count + 1)]].append({
                         "course": course_count + 1,
-                        "grade": int(grade_and_class_str) / 100,
+                        "grade": int(grade_and_class_str) // 100,
                         "classNum": int(grade_and_class_str) % 100,
                         "courseName": course_name
                     })
-
-print(teacher_timetable_list)
-
 
 output_teacher_timetable_list = {}
 for teacher_item in output_teacher_list:
@@ -394,23 +385,26 @@ for teacher_item in output_teacher_list:
 output_data = {
     "status": "success",
     "data": {
-        "classTimetableEdition": "26",
-        "classTimetableTitle": "108學年度第一學期課表",
+        "classTimetableEdition": EDITION,
+        "classTimetableTitle": TITLE,
         "teacherList": output_teacher_list,
         "teacherTimetable": output_teacher_timetable_list,
         "classTimetable": output_class_timetable_list,
-        "classTeacher": output_class_timetable_list
+        "classTeacher": output_class_teacher_list
     }
 }
 
-print(output_data)
-
 f = open("alldata.json", "w")
-f.write(str(output_data))
+f.write(json.dumps(output_data))
 f.close()
 
-output_class_timetable_edition = {"status":"success","data":{"classTimetableEdition":"26"}}
+output_class_timetable_edition = {
+    "status": "success",
+    "data": {
+        "classTimetableEdition": EDITION
+    }
+}
 
 f = open("classTimetableEdition.json", "w")
-f.write(str(output_class_timetable_edition))
+f.write(json.dumps(output_class_timetable_edition))
 f.close()
