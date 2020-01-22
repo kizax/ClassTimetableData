@@ -361,12 +361,30 @@ for key in teacher_page_link_list:
             else:
                 course_name = second_row_str
 
+            if key == "郭佩蓉":
+                print("day: {}, course: {}".format(day_count, course_count))
+                print("p[style*='Top:{top}'][style*='Left:{left}']".format(
+                    top=TEACHER_TIMETABLE_SECOND_ROW_COORDINATE[course_count],
+                    left=TEACHER_TIMETABLE_DAY_COLUMN_COORDINATE[day_count]))
+                print("1: {}".format(first_row_str))
+                print("2: {}".format(second_row_str))
+                print("3: {}".format(third_row_str))
+                print("{grade_and_class_str}-{course_name}".format(
+                    grade_and_class_str=grade_and_class_str,
+                    course_name=course_name))
+
+
             pattern = re.compile("^\d{3}$")
             if pattern.match(grade_and_class_str):
                 teacher_timetable_list[key][DAY_OF_WEEK_TRANSFORM[str(day_count + 1)]].append({
                         "course": course_count + 1,
                         "grade": int(grade_and_class_str) // 100,
                         "classNum": int(grade_and_class_str) % 100,
+                        "courseName": course_name
+                    })
+            elif course_name:
+                teacher_timetable_list[key][DAY_OF_WEEK_TRANSFORM[str(day_count + 1)]].append({
+                        "course": course_count + 1,
                         "courseName": course_name
                     })
 
