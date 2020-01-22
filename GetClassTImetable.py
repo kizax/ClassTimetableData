@@ -8,7 +8,7 @@ TEACHER_PAGE_LIST_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108first/
 CLASS_PAGE_LIST_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108first/INDEX_CLASS.HTM"
 ROOT_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108first/";
 
-EDITION = "26"
+EDITION = "27"
 TITLE = "108學年度第一學期課表"
 
 TOTAL_GRADE_NUM = 3
@@ -360,19 +360,6 @@ for key in teacher_page_link_list:
                 course_name = first_row_str
             else:
                 course_name = second_row_str
-
-            if key == "郭佩蓉":
-                print("day: {}, course: {}".format(day_count, course_count))
-                print("p[style*='Top:{top}'][style*='Left:{left}']".format(
-                    top=TEACHER_TIMETABLE_SECOND_ROW_COORDINATE[course_count],
-                    left=TEACHER_TIMETABLE_DAY_COLUMN_COORDINATE[day_count]))
-                print("1: {}".format(first_row_str))
-                print("2: {}".format(second_row_str))
-                print("3: {}".format(third_row_str))
-                print("{grade_and_class_str}-{course_name}".format(
-                    grade_and_class_str=grade_and_class_str,
-                    course_name=course_name))
-
 
             pattern = re.compile("^\d{3}$")
             if pattern.match(grade_and_class_str):
