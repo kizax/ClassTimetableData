@@ -236,7 +236,7 @@ for grade_num in range(1, TOTAL_GRADE_NUM + 1):
 
         soup = BeautifulSoup(res.text, "lxml")
 
-        class_teacher_name = soup.select_one("p[style*='Top:{top}px;'][style*='Left:{left}px;']".format(
+        class_teacher_name = soup.select_one("p[style*='Top:{top}'][style*='Left:{left}']".format(
             top=CLASS_TEACHER_NAME_ROW_COORDINATE,
             left=CLASS_TEACHER_NAME_COLUMN_COORDINATE)).get_text()
         class_timetable_list[grade_and_class_num]["class_teacher"] = class_teacher_name
@@ -247,17 +247,17 @@ for grade_num in range(1, TOTAL_GRADE_NUM + 1):
                 course_name = ""
                 course_teacher_name = ""
 
-                first_row_str_element = soup.select_one("p[style*='Top:{top}px;'][style*='Left:{left}px;']".format(
+                first_row_str_element = soup.select_one("p[style*='Top:{top}'][style*='Left:{left}']".format(
                     top=CLASS_TIMETABLE_FIRST_ROW_COORDINATE[course_count],
                     left=CLASS_TIMETABLE_DAY_COLUMN_COORDINATE[day_count]))
                 first_row_str = first_row_str_element.get_text() if first_row_str_element else ""
 
-                second_row_str_element = soup.select_one("p[style*='Top:{top}px;'][style*='Left:{left}px;']".format(
+                second_row_str_element = soup.select_one("p[style*='Top:{top}'][style*='Left:{left}']".format(
                     top=CLASS_TIMETABLE_SECOND_ROW_COORDINATE[course_count],
                     left=CLASS_TIMETABLE_DAY_COLUMN_COORDINATE[day_count]))
                 second_row_str = second_row_str_element.get_text() if second_row_str_element else ""
 
-                third_row_str_element = soup.select_one("p[style*='Top:{top}px;'][style*='Left:{left}px;']".format(
+                third_row_str_element = soup.select_one("p[style*='Top:{top}'][style*='Left:{left}']".format(
                     top=CLASS_TIMETABLE_THIRD_ROW_COORDINATE[course_count],
                     left=CLASS_TIMETABLE_DAY_COLUMN_COORDINATE[day_count]))
                 third_row_str = third_row_str_element.get_text() if third_row_str_element else ""
@@ -337,17 +337,17 @@ for key in teacher_page_link_list:
             grade_and_class_str = ""
             course_name = ""
 
-            first_row_str_element = soup.select_one("p[style*='Top:{top}px;'][style*='Left:{left}px;']".format(
+            first_row_str_element = soup.select_one("p[style*='Top:{top}'][style*='Left:{left}']".format(
                 top=TEACHER_TIMETABLE_FIRST_ROW_COORDINATE[course_count],
                 left=TEACHER_TIMETABLE_DAY_COLUMN_COORDINATE[day_count]))
             first_row_str = first_row_str_element.get_text() if first_row_str_element else ""
 
-            second_row_str_element = soup.select_one("p[style*='Top:{top}px;'][style*='Left:{left}px;']".format(
+            second_row_str_element = soup.select_one("p[style*='Top:{top}'][style*='Left:{left}']".format(
                 top=TEACHER_TIMETABLE_SECOND_ROW_COORDINATE[course_count],
                 left=TEACHER_TIMETABLE_DAY_COLUMN_COORDINATE[day_count]))
             second_row_str = second_row_str_element.get_text() if second_row_str_element else ""
 
-            third_row_str_element = soup.select_one("p[style*='Top:{top}px;'][style*='Left:{left}px;']".format(
+            third_row_str_element = soup.select_one("p[style*='Top:{top}'][style*='Left:{left}']".format(
                 top=TEACHER_TIMETABLE_THIRD_ROW_COORDINATE[course_count],
                 left=TEACHER_TIMETABLE_DAY_COLUMN_COORDINATE[day_count]))
             third_row_str = third_row_str_element.get_text() if third_row_str_element else ""
