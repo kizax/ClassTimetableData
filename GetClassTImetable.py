@@ -372,6 +372,8 @@ for key in teacher_page_link_list:
             elif course_name:
                 teacher_timetable_list[key][DAY_OF_WEEK_TRANSFORM[str(day_count + 1)]].append({
                         "course": course_count + 1,
+                        "grade": 0,
+                        "classNum": 0,
                         "courseName": course_name
                     })
 
