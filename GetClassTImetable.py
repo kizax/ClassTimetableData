@@ -4,12 +4,12 @@ import re
 
 from bs4 import BeautifulSoup
 
-TEACHER_PAGE_LIST_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108first/INDEX_TEAC.HTM"
-CLASS_PAGE_LIST_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108first/INDEX_CLASS.HTM"
-ROOT_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108first/";
+TEACHER_PAGE_LIST_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108second/INDEX_TEAC.HTM"
+CLASS_PAGE_LIST_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108second/INDEX_CLASS.HTM"
+ROOT_URL = "http://apps.tcfsh.tc.edu.tw/webadmin/adm/t202/108second/"
 
-EDITION = "27"
-TITLE = "108學年度第一學期課表"
+EDITION = "28"
+TITLE = "108學年度第二學期課表"
 
 TOTAL_GRADE_NUM = 3
 TOTAL_CLASS_NUM = 25
@@ -166,6 +166,9 @@ for teacher_link in soup.select("p a"):
     teacher_name = teacher_link.get_text()
     teacher_timetable_link = teacher_link.attrs.get("href")
 
+    if teacher_name == "張?文":
+        teacher_name = "張靜文"
+
     teacher_page_link_list[teacher_name] = {
         "id": id_count,
         "link": teacher_timetable_link
@@ -241,6 +244,12 @@ for grade_num in range(1, TOTAL_GRADE_NUM + 1):
             left=CLASS_TEACHER_NAME_COLUMN_COORDINATE)).get_text()
         class_timetable_list[grade_and_class_num]["class_teacher"] = class_teacher_name
 
+        if "林裕" in class_teacher_name:
+            class_timetable_list[grade_and_class_num]["class_teacher"] = "林裕?"
+
+        if class_teacher_name == "張?文":
+            class_timetable_list[grade_and_class_num]["class_teacher"] = "張靜文"
+
 
         for day_count in range(0, DAY_NUM):
             for course_count in range(0, COURSE_NUM):
@@ -284,7 +293,6 @@ for grade_num in range(1, TOTAL_GRADE_NUM + 1):
                             "teacherName": course_teacher_name,
                             "courseName": course_name
                         })
-
 
 output_class_teacher_list = []
 output_class_timetable_list = []
@@ -381,6 +389,9 @@ output_teacher_timetable_list = {}
 for teacher_item in output_teacher_list:
     teacher_id = teacher_item["id"]
     teacher_name = teacher_item["teacherName"]
+
+    if teacher_name == "張?文":
+        teacher_name = "張靜文"
 
     output_teacher_timetable_list[teacher_id] = {
         "teacherId": teacher_id,
